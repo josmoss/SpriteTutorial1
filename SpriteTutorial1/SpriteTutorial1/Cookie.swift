@@ -8,7 +8,7 @@
 
 import SpriteKit
 
-enum CookieType: Int {
+enum CookieType: Int, CustomStringConvertible {
     case Unknown = 0, Croissant, Cupcake, Danish, Donut, Macaroon, SugarCookie
     
     var spriteName: String {
@@ -23,6 +23,10 @@ enum CookieType: Int {
     return spriteNames[rawValue - 1]
     }
     
+    var description: String {
+        return spriteName
+    }
+    
     var highlightedSpriteName: String {
         return spriteName + "-Highlighted"
     }
@@ -32,11 +36,14 @@ enum CookieType: Int {
     }
 }
 
-class Cookie {
+class Cookie: CustomStringConvertible {
     var column: Int
     var row: Int
     let cookieType: CookieType
     var sprite: SKSpriteNode?
+    var description: String {
+        return "type:\(cookieType) square:(\(column),\(row))"
+    }
     
     init(column: Int, row: Int, cookieType: CookieType) {
         self.column = column
