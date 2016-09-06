@@ -136,4 +136,30 @@ class GameScene: SKScene {
         }
     }
     
+    func trySwapHorizontal(horzDelta: Int, vertical vertDelta: Int) {
+        
+        let toColumn = swipeFromColumn! + horzDelta
+        let toRow = swipeFromRow! + vertDelta
+        
+        guard toColumn >= 0 && toColumn < NumColumns else { return }
+        guard toRow >= 0 && toRow < NumRows else { return }
+        
+        if let toCookie = level.cookieAtColumn(toColumn, row: toRow),
+            let fromCookie = level.cookieAtColumn(swipeFromColumn!, row: swipeFromRow!) {
+            
+            print("*** swapping \(fromCookie) with \(toCookie)")
+        }
+    }
+    
+    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        swipeFromColumn = nil
+        swipeFromRow = nil
+    }
+    
+    override func touchesCancelled(touches: Set<UITouch>?, withEvent event: UIEvent?) {
+        if let touches = touches {
+            touchesEnded(touches, withEvent: event)
+        }
+    }
+    
 }
