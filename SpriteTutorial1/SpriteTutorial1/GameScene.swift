@@ -22,6 +22,9 @@ class GameScene: SKScene {
     let cookiesLayer = SKNode()
     let tilesLayer = SKNode()
     
+    private var swipeFromColumn: Int?
+    private var swipeFromRow: Int?
+    
     override init(size: CGSize) {
         super.init(size: size)
         
@@ -42,6 +45,9 @@ class GameScene: SKScene {
         
         cookiesLayer.position = layerPosition
         gameLayer.addChild(cookiesLayer)
+        
+        swipeFromColumn = nil
+        swipeFromRow = nil
     }
     
     func addTiles() {
@@ -74,6 +80,60 @@ class GameScene: SKScene {
         return CGPoint(
             x: CGFloat(column)*TileWidth + TileWidth/2,
             y: CGFloat(row)*TileHeight + TileHeight/2)
+    }
+    
+    func convertPoint(point: CGPoint) -> (success: Bool, column: Int, row: Int) {
+         if point.x >= 0 && point.x < CGFloat(NumColumns)*TileWidth &&
+            point.y >= 0 && point.y < CGFloat(NumColumns)*TileHeight {
+            return (true, Int(point.x / TileWidth), Int(point.y / TileHeight))
+         } else {
+            return (false, 0, 0) // Invalid Location
+        }
+    }
+    
+    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        
+        guard let touch = touches.first else { return }
+        let location = touch.locationInNode(cookiesLayer)
+        
+        let (success, column, row) = convertPoint(location)
+        if success {
+            
+            if let cookie = level.cookieAtColumn(column, row: row) {
+                
+                swipeFromColumn = column
+                swipeFromRow = row
+            }
+        }
+    }
+    
+    override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        
+        guard swipeFromColumn != nil else { return }
+        
+        guard let touch = touches.first else { return }
+        let location = touch.locationInNode(cookiesLayer)
+        
+        let (success, column, row) = convertPoint(location)
+        if success {
+            
+            var horzDelta = 0, vertDelta = 0
+            if column < swipeFromColumn! {
+                horzDelta = -1
+            } else if column > swipeFromColumn! {
+                horzDelta = 1
+            } else if row < swipeFromRow! {
+                vertDelta = -1
+            } else if row > swipeFromRow! {
+                vertDelta = 1
+            }
+            
+            if horzDelta != 0 || vertDelta != 0 {
+                trySwapHorizontal(horzDelta, vertical: vertDelta)
+                
+                swipeFromColumn = nil
+            }
+        }
     }
     
 }
