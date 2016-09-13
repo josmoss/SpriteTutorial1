@@ -23,6 +23,12 @@ class GameScene: SKScene {
     let cookiesLayer = SKNode()
     let tilesLayer = SKNode()
     
+    let swapSound = SKAction.playSoundFileNamed("Chomp.wav", waitForCompletion: false)
+    let invalidSwapSound = SKAction.playSoundFileNamed("Error.wav", waitForCompletion: false)
+    let matchSound = SKAction.playSoundFileNamed("Ka-Ching.wav", waitForCompletion: false)
+    let fallingCookieSound = SKAction.playSoundFileNamed("Scrape.wav", waitForCompletion: false)
+    let addCookieSound = SKAction.playSoundFileNamed("Drip.wav", waitForCompletion: false)
+    
     private var swipeFromColumn: Int?
     private var swipeFromRow: Int?
     
@@ -188,6 +194,8 @@ class GameScene: SKScene {
         let moveB = SKAction.moveTo(spriteA.position, duration: Duration)
         moveB.timingMode = .EaseOut
         spriteB.runAction(moveB)
+        
+        runAction(swapSound)
     }
     
     func animateInvalidSwap(swap: Swap, completion: () -> ()) {
@@ -207,6 +215,8 @@ class GameScene: SKScene {
         
         spriteA.runAction(SKAction.sequence([moveA, moveB]), completion: completion)
         spriteB.runAction(SKAction.sequence([moveB, moveA]))
+        
+        runAction(invalidSwapSound)
     }
     
     func showSelectionIndicatorForCookie(cookie: Cookie) {
