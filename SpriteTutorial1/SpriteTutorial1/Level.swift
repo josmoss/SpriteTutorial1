@@ -125,6 +125,23 @@ class Level {
                             cookies[column + 1, row] = other
                         }
                     }
+                    
+                    if row < NumRows - 1 {
+                        
+                        if let other = cookies[column, row + 1] {
+                            
+                            cookies[column, row] = other
+                            cookies[column, row + 1] = cookie
+                            
+                            if hasChainAtColumn(column, row: row + 1) ||
+                                hasChainAtColumn(column, row: row) {
+                                set.insert(Swap(cookieA: cookie, cookieB: other))
+                            }
+                            
+                            cookies[column, row] = cookie
+                            cookies[column, row + 1] = other
+                        }
+                    }
                 }
             }
         }
