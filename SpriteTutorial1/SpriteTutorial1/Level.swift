@@ -102,6 +102,36 @@ class Level {
         return set
     }
     
+    func detectPossibleSwaps() {
+        var set = Set<Swap>()
+        
+        for row in 0..<NumRows {
+            for column in 0..<NumColumns {
+                if let cookie = cookies[column, row] {
+                    
+                    if column < NumColumns - 1  {
+                        
+                        if let other = cookies[column + 1, row] {
+                            
+                            cookies[column, row] = other
+                            cookies[column + 1, row] = cookie
+                            
+                            if hasChainAtColumn(column + 1, row: row) ||
+                                hasChainAtColumn(column, row: row) {
+                                set.insert(Swap(cookieA: cookie, cookieB: other))
+                            }
+                            
+                            cookies[column, row] = cookie
+                            cookies[column + 1, row] = other
+                        }
+                    }
+                }
+            }
+        }
+        
+        possibleSwaps = set
+    }
+    
     func performSwap(swap: Swap) {
         let columnA = swap.cookieA.column
         let rowA = swap.cookieA.row
