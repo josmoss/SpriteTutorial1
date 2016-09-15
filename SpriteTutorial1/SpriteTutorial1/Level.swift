@@ -246,6 +246,37 @@ class Level {
         }
     }
     
+    func fillHoles() -> [[Cookie]] {
+        var columns = [[Cookie]]()
+        
+        for column in 0..<NumColumns {
+            var array = [Cookie]()
+            for row in 0..<NumRows {
+                
+                if tiles[column, row] != nil && cookies[column, row] == nil {
+                    
+                    for lookup in (row + 1)..<NumRows {
+                        if let cookie = cookies[column, lookup] {
+                            
+                            cookies[column, lookup] = nil
+                            cookies[column, row] = cookie
+                            cookie.row = row
+                            
+                            array.append(cookie)
+                            
+                            break
+                        }
+                    }
+                }
+            }
+            
+            if !array.isEmpty {
+                columns.append(array)
+            }
+        }
+        return columns
+    }
+    
     init(filename: String) {
         guard let dictionary = Dictionary<String, AnyObject>.loadJSONFromBundle(filename) else { return }
         
