@@ -229,10 +229,21 @@ class Level {
         let horizontalChains = detectHorizontalMatches()
         let verticalChains = detectVerticalMatches()
         
-        print("Horizontal matches: \(horizontalChains)")
-        print("Vertical matches: \(verticalChains)")
+//        print("Horizontal matches: \(horizontalChains)")
+//        print("Vertical matches: \(verticalChains)")
+
+        removeCookies(horizontalChains)
+        removeCookies(verticalChains)
         
         return horizontalChains.union(verticalChains)
+    }
+    
+    private func removeCookies(chains: Set<Chain>) {
+        for chain in chains {
+            for cookie in chain.cookies {
+                cookies[cookie.column, cookie.row] = nil
+            }
+        }
     }
     
     init(filename: String) {
