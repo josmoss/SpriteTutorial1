@@ -29,6 +29,9 @@ class GameScene: SKScene {
     let fallingCookieSound = SKAction.playSoundFileNamed("Scrape.wav", waitForCompletion: false)
     let addCookieSound = SKAction.playSoundFileNamed("Drip.wav", waitForCompletion: false)
     
+    let cropLayer = SKCropNode()
+    let maskLayer = SKNode()
+    
     private var swipeFromColumn: Int?
     private var swipeFromRow: Int?
     
@@ -52,8 +55,13 @@ class GameScene: SKScene {
         tilesLayer.position = layerPosition
         gameLayer.addChild(tilesLayer)
         
+        gameLayer.addChild(cropLayer)
+        
+        maskLayer.position = layerPosition
+        cropLayer.maskNode = maskLayer
+        
         cookiesLayer.position = layerPosition
-        gameLayer.addChild(cookiesLayer)
+        cropLayer.addChild(cookiesLayer)
         
         swipeFromColumn = nil
         swipeFromRow = nil
@@ -66,9 +74,35 @@ class GameScene: SKScene {
         for row in 0..<NumRows {
             for column in 0..<NumColumns {
                 if level.tileAtColumn(column, row: row) != nil {
-                    let tileNode = SKSpriteNode(imageNamed: "Tile")
+                    let tileNode = SKSpriteNode(imageNamed: "MaskTile")
                     tileNode.size = CGSize(width: TileWidth, height: TileHeight)
                     tileNode.position = pointForColumn(column, row: row)
+                    maskLayer.addChild(tileNode)
+                }
+            }
+        }
+        
+        for row in 0...NumRows {
+            for column in 0...NumColumns {
+                let topLeft    = (column > 0) && (row < NumRows)
+                                              && level.tileAtColumn(column - 1, row: row) != nil
+                let bottomLeft = (column > 0) && (row > 0)
+                                              && level.tileAtColumn(column - 1, row: row - 1) != nil
+                let topRight   = (column < NumColumns) && (row < NumRows)
+                                                       && level.tileAtColumn(column, row: row) != nil
+                let bottomRight = (column < NumColumns) && (row > 0)
+                                                        && level.tileAtColumn(column, row: row - 1) != nil
+                
+                let value = Int(topLeft) | Int(topRight) << 1 | Int(bottomLeft) << 2 | Int(bottomRight) << 3
+                
+                if value != 0 && value != 6 && value != 9 {
+                    let name = String(format: "Tile_%ld", value)
+                    let tileNode = SKSpriteNode(imageNamed: name)
+                    tileNode.size = CGSize(width: TileWidth, height: TileHeight)
+                    var point = pointForColumn(column, row: row)
+                    point.x -= TileWidth/2
+                    point.y -= TileHeight/2
+                    tileNode.position = point
                     tilesLayer.addChild(tileNode)
                 }
             }

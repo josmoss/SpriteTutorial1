@@ -32,6 +32,7 @@
 		D8E8E3BF1D7E81E8000118F6 /* Level_3.json in Resources */ = {isa = PBXBuildFile; fileRef = D8E8E3BA1D7E81E8000118F6 /* Level_3.json */; };
 		D8E8E3C01D7E81E8000118F6 /* Level_4.json in Resources */ = {isa = PBXBuildFile; fileRef = D8E8E3BB1D7E81E8000118F6 /* Level_4.json */; };
 		D8E8E3C21D7E82CD000118F6 /* Tile.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E8E3C11D7E82CD000118F6 /* Tile.swift */; };
+		D8F4C9231D91A37A00E05225 /* Grid.atlas in Resources */ = {isa = PBXBuildFile; fileRef = D8F4C9221D91A37A00E05225 /* Grid.atlas */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -62,6 +63,7 @@
 		D8E8E3BA1D7E81E8000118F6 /* Level_3.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Level_3.json; sourceTree = "<group>"; };
 		D8E8E3BB1D7E81E8000118F6 /* Level_4.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Level_4.json; sourceTree = "<group>"; };
 		D8E8E3C11D7E82CD000118F6 /* Tile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tile.swift; sourceTree = "<group>"; };
+		D8F4C9221D91A37A00E05225 /* Grid.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = Grid.atlas; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -167,6 +169,7 @@
 				D81EB0D71D88BCDD00A8A8DE /* Sounds */,
 				D8E8E3B61D7E81E8000118F6 /* Levels */,
 				D8E8E3A01D79E0CB000118F6 /* Assets.xcassets */,
+				D8F4C9221D91A37A00E05225 /* Grid.atlas */,
 				D8E8E3AB1D79E132000118F6 /* Sprites.atlas */,
 			);
 			name = "Supporting Files";
@@ -233,6 +236,7 @@
 				D8E8E3A41D79E0CB000118F6 /* LaunchScreen.storyboard in Resources */,
 				D81EB0DF1D88BCDD00A8A8DE /* Drip.wav in Resources */,
 				D8E8E3C01D7E81E8000118F6 /* Level_4.json in Resources */,
+				D8F4C9231D91A37A00E05225 /* Grid.atlas in Resources */,
 				D81EB0E01D88BCDD00A8A8DE /* Error.wav in Resources */,
 				D8E8E3BE1D7E81E8000118F6 /* Level_2.json in Resources */,
 				D81EB0E31D88BCDD00A8A8DE /* Scrape.wav in Resources */,
