@@ -43,6 +43,8 @@ class GameScene: SKScene {
         
         addChild(gameLayer)
         
+        gameLayer.hidden = true
+        
         let layerPosition = CGPoint(
             x: -TileWidth * CGFloat(NumColumns) / 2,
             y: -TileHeight * CGFloat(NumRows) / 2)
@@ -325,6 +327,20 @@ class GameScene: SKScene {
         
     }
     
+    func animateGameOver(completion: () -> ()) {
+        let action = SKAction.moveBy(CGVector(dx: 0, dy: -size.height), duration: 0.3)
+        action.timingMode = .EaseIn
+        gameLayer.runAction(action, completion: completion)
+    }
+    
+    func animateBeginGame(completion: () -> ()) {
+        gameLayer.hidden = false
+        gameLayer.position = CGPoint(x: 0, y: size.height)
+        let action = SKAction.moveBy(CGVector(dx: 0, dy: -size.height), duration: 0.3)
+        action.timingMode = .EaseOut
+        gameLayer.runAction(action, completion: completion)
+    }
+    
     func showSelectionIndicatorForCookie(cookie: Cookie) {
         
         if selectionSprite.parent != nil {
@@ -345,5 +361,9 @@ class GameScene: SKScene {
         selectionSprite.runAction(SKAction.sequence([
             SKAction.fadeOutWithDuration(0.3),
             SKAction.removeFromParent()]))
+    }
+    
+    func removeAllCookieSprites() {
+        cookiesLayer.removeAllChildren()
     }
 }

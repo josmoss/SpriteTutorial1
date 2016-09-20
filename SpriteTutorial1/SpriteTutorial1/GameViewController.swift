@@ -21,6 +21,7 @@ class GameViewController: UIViewController {
     @IBOutlet weak var movesLabel: UILabel!
     @IBOutlet weak var scoreLabel: UILabel!
     @IBOutlet weak var gameOverPanel: UIImageView!
+    @IBOutlet weak var shuffleButton: UIButton!
     
     override func prefersStatusBarHidden() -> Bool {
         return true
@@ -53,6 +54,8 @@ class GameViewController: UIViewController {
         scene.addTiles()
         
         beginGame()
+        
+        shuffleButton.hidden = true
     }
     
     func beginGame() {
@@ -60,10 +63,14 @@ class GameViewController: UIViewController {
         score = 0
         updateLabels()
         level.resetComboMultiplier()
+        scene.animateBeginGame() {
+            self.shuffleButton.hidden = false
+        }
         shuffle()
     }
     
     func shuffle() {
+        scene.removeAllCookieSprites()
         let newCookies = level.shuffle()
         scene.addSpritesForCookies(newCookies)
     }
@@ -132,8 +139,12 @@ class GameViewController: UIViewController {
         gameOverPanel.hidden = false
         scene.userInteractionEnabled = false
         
-        self.tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.hideGameOver))
-        view.addGestureRecognizer(tapGestureRecognizer)
+        scene.animateGameOver() {
+            self.tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.hideGameOver))
+            self.view.addGestureRecognizer(self.tapGestureRecognizer)
+        }
+        
+        shuffleButton.hidden = true
     }
     
     func hideGameOver() {
@@ -144,6 +155,12 @@ class GameViewController: UIViewController {
         scene.userInteractionEnabled = true
         
         beginGame()
+    }
+    
+    
+    @IBAction func shuffleButtonPressed(sender: AnyObject) {
+        shuffle()
+        decrementMoves()
     }
 
 }
