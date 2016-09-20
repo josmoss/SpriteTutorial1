@@ -15,10 +15,12 @@ class GameViewController: UIViewController {
     var level: Level!
     var movesLeft = 0
     var score = 0
+    var tapGestureRecognizer: UITapGestureRecognizer!
     
     @IBOutlet weak var targetLabel: UILabel!
     @IBOutlet weak var movesLabel: UILabel!
     @IBOutlet weak var scoreLabel: UILabel!
+    @IBOutlet weak var gameOverPanel: UIImageView!
     
     override func prefersStatusBarHidden() -> Bool {
         return true
@@ -37,6 +39,8 @@ class GameViewController: UIViewController {
         
         let skView = view as! SKView
         skView.multipleTouchEnabled = false
+        
+        gameOverPanel.hidden = true
         
         scene = GameScene(size: skView.bounds.size)
         scene.scaleMode = .AspectFill
@@ -102,12 +106,44 @@ class GameViewController: UIViewController {
         level.resetComboMultiplier()
         level.detectPossibleSwaps()
         view.userInteractionEnabled = true
+        decrementMoves()
     }
     
     func updateLabels() {
         targetLabel.text = String(format: "%ld", level.targetScore)
         movesLabel.text = String(format: "%ld", movesLeft)
         scoreLabel.text = String(format: "%ld", score)
+    }
+    
+    func decrementMoves() {
+        movesLeft -= 1
+        updateLabels()
+        
+        if score >= level.targetScore {
+            gameOverPanel.image = UIImage(named: "LevelComplete")
+            showGameOver()
+        } else if movesLeft == 0 {
+            gameOverPanel.image = UIImage(named: "GameOver")
+            showGameOver()
+        }
+    }
+    
+    func showGameOver() {
+        gameOverPanel.hidden = false
+        scene.userInteractionEnabled = false
+        
+        self.tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.hideGameOver))
+        view.addGestureRecognizer(tapGestureRecognizer)
+    }
+    
+    func hideGameOver() {
+        view.removeGestureRecognizer(tapGestureRecognizer)
+        tapGestureRecognizer = nil
+        
+        gameOverPanel.hidden = true
+        scene.userInteractionEnabled = true
+        
+        beginGame()
     }
 
 }
