@@ -17,6 +17,7 @@ class GameViewController: UIViewController {
     var movesLeft = 0
     var score = 0
     var tapGestureRecognizer: UITapGestureRecognizer!
+    var currentLevelNum = 1
     
     lazy var backgroundMusic: AVAudioPlayer? = {
         guard let url = NSBundle.mainBundle().URLForResource("Mining by Moonlight", withExtension: "mp3") else {
@@ -52,26 +53,31 @@ class GameViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        setupLevel(currentLevelNum)
+        
+        backgroundMusic?.play()
+        
+    }
+    
+    func setupLevel(levelNum: Int) {
         let skView = view as! SKView
         skView.multipleTouchEnabled = false
-        
-        gameOverPanel.hidden = true
         
         scene = GameScene(size: skView.bounds.size)
         scene.scaleMode = .AspectFill
         
+        level = Level(filename: "Level_\(levelNum)")
+        scene.level = level
+        
+        scene.addTiles()
         scene.swipeHandler = handleSwipe
+        
+        gameOverPanel.hidden = true
+        shuffleButton.hidden = true
+        
         skView.presentScene(scene)
         
-        level = Level(filename: "Level_1")
-        scene.level = level
-        scene.addTiles()
-        
-        backgroundMusic?.play()
-        
         beginGame()
-        
-        shuffleButton.hidden = true
     }
     
     func beginGame() {
@@ -144,6 +150,7 @@ class GameViewController: UIViewController {
         
         if score >= level.targetScore {
             gameOverPanel.image = UIImage(named: "LevelComplete")
+            currentLevelNum = currentLevelNum <  NumLevels ? currentLevelNum+1 : 1
             showGameOver()
         } else if movesLeft == 0 {
             gameOverPanel.image = UIImage(named: "GameOver")
@@ -170,7 +177,7 @@ class GameViewController: UIViewController {
         gameOverPanel.hidden = true
         scene.userInteractionEnabled = true
         
-        beginGame()
+        setupLevel(currentLevelNum)
     }
     
     

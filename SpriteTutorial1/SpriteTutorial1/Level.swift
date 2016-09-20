@@ -10,6 +10,7 @@ import Foundation
 
 let NumColumns = 9
 let NumRows = 9
+let NumLevels = 4
 
 class Level {
     private var cookies = Array2D<Cookie>(columns: NumColumns, rows: NumRows)
